@@ -75,17 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             const telefono = document.getElementById('telefono-buscar').value;
 
-            fetch(`/contactos/${telefono}`)
-                .then(response => response.json())
+            fetch(`/contactos/telefono/${telefono}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Contacto no encontrado');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     const resultadoDiv = document.getElementById('resultado-buscar');
-                    if (data) {
-                        resultadoDiv.innerHTML = `<p>Nombre: ${data.nombre}<br>Teléfono: ${data.telefono}</p>`;
-                    } else {
-                        resultadoDiv.innerHTML = '<p>Contacto no encontrado</p>';
-                    }
+                    resultadoDiv.innerHTML = `<p>Nombre: ${data.nombre}<br>Teléfono: ${data.telefono}</p>`;
                 })
-                .catch(error => console.error('Error al buscar contacto:', error));
+                .catch(error => {
+                    const resultadoDiv = document.getElementById('resultado-buscar');
+                    resultadoDiv.innerHTML = '<p>Contacto no encontrado</p>';
+                    console.error('Error al buscar contacto:', error);
+                });
         });
     }
 
@@ -104,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             const telefono = document.getElementById('telefono-eliminar').value;
 
-            fetch(`/contactos/${telefono}`, {
+            fetch(`/contactos/telefono/${telefono}`, {
                 method: 'DELETE',
             })
                 .then(response => {
