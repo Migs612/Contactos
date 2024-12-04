@@ -92,11 +92,11 @@ app.post('/contactos', (req, res) => {
     });
 });
 
-app.delete('/contactos/:id', (req, res) => {
-    const { id } = req.params;
-
-    const query = 'DELETE FROM contactos WHERE id = $1 RETURNING *';
-    const values = [id];
+ // Ruta para eliminar un contacto por teléfono
+app.delete('/contactos/telefono/:telefono', (req, res) => {
+    const { telefono } = req.params;  // Obtienes el teléfono del contacto a eliminar
+    const query = 'DELETE FROM contactos WHERE telefono = $1 RETURNING *';  // Consulta SQL para eliminar el contacto por teléfono
+    const values = [telefono];
 
     client.query(query, values, (err, results) => {
         if (err) {
@@ -109,7 +109,7 @@ app.delete('/contactos/:id', (req, res) => {
             return res.status(404).send('Contacto no encontrado');
         }
 
-        res.status(200).json(results.rows[0]);
+        res.status(200).json(results.rows[0]);  // Devuelves el contacto eliminado
     });
 });
 

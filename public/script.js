@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => {
                     if (response.ok) {
                         alert('Contacto agregado exitosamente');
-                        listarContactos(); // Actualizar la lista
+                        listarContactos();
                     } else {
                         alert('Error al agregar contacto');
                     }
@@ -103,24 +103,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button type="submit">Eliminar</button>
             </form>
         `;
-
+    
         const form = document.getElementById('form-eliminar-contacto');
         form.addEventListener('submit', event => {
             event.preventDefault();
             const telefono = document.getElementById('telefono-eliminar').value;
-
-            fetch(`/contactos/telefono/${telefono}`, {
+            
+            const urlEliminar = `/contactos/telefono/${telefono}`;
+            console.log('URL de eliminación:', urlEliminar);
+            
+            fetch(urlEliminar, {
                 method: 'DELETE',
             })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Contacto eliminado exitosamente');
-                        listarContactos(); // Actualizar la lista
-                    } else {
-                        alert('Error al eliminar contacto');
-                    }
-                })
-                .catch(error => console.error('Error al eliminar contacto:', error));
+            .then(response => {
+                if (response.ok) {
+                    alert('Contacto eliminado exitosamente');
+                    listarContactos();
+                } else {
+                    alert('Error al eliminar contacto');
+                }
+            })
+            .catch(error => console.error('Error al eliminar contacto:', error));
         });
     }
 
