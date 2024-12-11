@@ -32,7 +32,21 @@ const createTableQuery = `
     );
 `;
 
+const createTableLoginQuery = `
+    CREATE TABLE IF NOT EXISTS login (
+        id SERIAL PRIMARY KEY,
+        nombre VARCHAR(100) NOT NULL,
+        correo VARCHAR(100) NOT NULL,
+        fechaNacimiento DATE NOT NULL,
+        contraseña VARCHAR(20) NOT NULL
+    );
+`;
+
 client.query(createTableQuery)
+    .then(() => console.log('Tabla contactos creada o ya existe'))
+    .catch(err => console.error('Error al crear la tabla', err.stack));
+
+client.query(createTableLoginQuery)
     .then(() => console.log('Tabla contactos creada o ya existe'))
     .catch(err => console.error('Error al crear la tabla', err.stack));
 
@@ -92,10 +106,9 @@ app.post('/contactos', (req, res) => {
     });
 });
 
- // Ruta para eliminar un contacto por teléfono
 app.delete('/contactos/telefono/:telefono', (req, res) => {
-    const { telefono } = req.params;  // Obtienes el teléfono del contacto a eliminar
-    const query = 'DELETE FROM contactos WHERE telefono = $1 RETURNING *';  // Consulta SQL para eliminar el contacto por teléfono
+    const { telefono } = req.params; 
+    const query = 'DELETE FROM contactos WHERE telefono = $1 RETURNING *';
     const values = [telefono];
 
     client.query(query, values, (err, results) => {
@@ -109,7 +122,40 @@ app.delete('/contactos/telefono/:telefono', (req, res) => {
             return res.status(404).send('Contacto no encontrado');
         }
 
-        res.status(200).json(results.rows[0]);  // Devuelves el contacto eliminado
+        res.status(200).json(results.rows[0]);
+    });
+});
+
+app.get('/login', (req, res) => {
+    const query = 'SELECT * FROM login';
+    client.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al obtener los registros de login:', err);
+            res.status(500).send('Error al obtener los registros de login');
+            return;
+        }
+        res.json(results.rows);
+    });
+});
+
+
+app.post('/login', (req, res) => {
+    const { nombre, correo, fechaNacimiento, contraseña } = req.body;
+
+    if (!nombre || !correo || !fechaNacimiento || !contraseña) {
+        return res.status(400).send('Faltan datos (nombre, correo, fechaNacimiento o contraseña)');
+    }
+
+    const query = 'INSERT INTO login (nombre, correo, fechaNacimiento, contraseña) VALUES ($1, $2, $3, $4) RETURNING *';
+    const values = [nombre, correo, fechaNacimiento, contraseña];
+
+    client.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error al agregar el registro de login:', err);
+            res.status(500).send('Error al agregar el registro de login');
+            return;
+        }
+        res.status(201).json(results.rows[0]);
     });
 });
 

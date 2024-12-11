@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styleLogin.css">
+</head>
+
+<body>
+    <div id="div_form">
+        <form id="form_login">
+            <h3>LOG IN</h3>
+            <label for="login_nombre">Nombre</label>
+            <input type="text" id="login_nombre" placeholder="Ingrese el nombre de usuario">
+            <label for="login_password">Contraseña</label>
+            <input type="password" id="login_password" placeholder="Ingrese la contraseña">
+            <button type="button" id="btn_login">Iniciar sesión</button>
+            <button type="button" id="btn_show_register">Registrarme</button>
+        </form>
+
+        <form id="form_registro" class="hidden">
+            <h3>REGISTRO</h3>
+            <label for="reg_nombre">Nombre</label>
+            <input type="text" id="reg_nombre" placeholder="Ingrese el nombre de usuario">
+            <label for="reg_email">Email</label>
+            <input type="email" id="reg_email" placeholder="Ingrese el email">
+            <label for="reg_password">Contraseña</label>
+            <input type="password" id="reg_password" placeholder="Ingrese la contraseña">
+            <label for="rreg_password">Repetir contraseña</label>
+            <input type="password" id="rreg_password" placeholder="Repita la contraseña">
+            <button type="button" id="btn_register">Registrarme</button>
+            <button type="button" id="btn_show_login">Volver al login</button>
+        </form>
+    </div>
+    <script src="scriptLogin.js"></script>
+</body>
+
+</html>
