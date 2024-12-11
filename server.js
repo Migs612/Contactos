@@ -52,7 +52,7 @@ client.query(createTableContactosQuery)
     .catch(err => console.error('Error al crear la tabla de contactos', err.stack));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');  
+    res.sendFile(__dirname + '/public/login.html');  
 });
 
 // Métodos para Contactos

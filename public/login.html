@@ -1,40 +1,37 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="styleLogin.css">
+    <title>Login/Registro</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
-    <div id="div_form">
-        <form id="form_login">
-            <h3>LOG IN</h3>
-            <label for="login_nombre">Nombre</label>
-            <input type="text" id="login_nombre" placeholder="Ingrese el nombre de usuario">
-            <label for="login_password">Contraseña</label>
-            <input type="password" id="login_password" placeholder="Ingrese la contraseña">
-            <button type="button" id="btn_login">Iniciar sesión</button>
-            <button type="button" id="btn_show_register">Registrarme</button>
-        </form>
+    <div class="container">
+        <h1>Bienvenido</h1>
 
-        <form id="form_registro" class="hidden">
-            <h3>REGISTRO</h3>
-            <label for="reg_nombre">Nombre</label>
-            <input type="text" id="reg_nombre" placeholder="Ingrese el nombre de usuario">
-            <label for="reg_email">Email</label>
-            <input type="email" id="reg_email" placeholder="Ingrese el email">
-            <label for="reg_password">Contraseña</label>
-            <input type="password" id="reg_password" placeholder="Ingrese la contraseña">
-            <label for="rreg_password">Repetir contraseña</label>
-            <input type="password" id="rreg_password" placeholder="Repita la contraseña">
-            <button type="button" id="btn_register">Registrarme</button>
-            <button type="button" id="btn_show_login">Volver al login</button>
-        </form>
+        <div id="login-container" class="form-container">
+            <h2>Iniciar Sesión</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Correo electrónico" required>
+                <input type="password" id="login-password" placeholder="Contraseña" required>
+                <button type="submit">Iniciar Sesión</button>
+                <p id="login-message" class="message"></p>
+            </form>
+        </div>
+
+        <div id="register-container" class="form-container">
+            <h2>Registrarse</h2>
+            <form id="register-form">
+                <input type="text" id="register-name" placeholder="Nombre" required>
+                <input type="email" id="register-email" placeholder="Correo electrónico" required>
+                <input type="password" id="register-password" placeholder="Contraseña" required>
+                <button type="submit">Registrarse</button>
+                <p id="register-message" class="message"></p>
+            </form>
+        </div>
     </div>
-    <script src="scriptLogin.js"></script>
-</body>
 
+    <script src="js/login.js"></script>
+</body>
 </html>
