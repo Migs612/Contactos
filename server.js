@@ -24,39 +24,42 @@ client.connect()
     .then(() => console.log('Conexión exitosa a PostgreSQL en Render'))
     .catch(err => console.error('Error al conectar a PostgreSQL', err.stack));
 
-const createTableQuery = `
+const createTableContactosQuery = `
     CREATE TABLE IF NOT EXISTS contactos (
         id SERIAL PRIMARY KEY,
         nombre VARCHAR(100) NOT NULL,
-        telefono VARCHAR(15) NOT NULL UNIQUE
+        telefono VARCHAR(15) NOT NULL,
+        id_usuario INTEGER NOT NULL,
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
     );
 `;
 
-const createTableLoginQuery = `
-    CREATE TABLE IF NOT EXISTS login (
+const createTableUsuariosQuery = `
+    CREATE TABLE IF NOT EXISTS usuarios (
         id SERIAL PRIMARY KEY,
         nombre VARCHAR(100) NOT NULL,
-        correo VARCHAR(100) NOT NULL,
-        fechaNacimiento DATE NOT NULL,
-        contraseña VARCHAR(20) NOT NULL
+        correo VARCHAR(100) NOT NULL UNIQUE,
+        contraseña VARCHAR(255) NOT NULL
     );
 `;
 
-client.query(createTableQuery)
-    .then(() => console.log('Tabla contactos creada o ya existe'))
-    .catch(err => console.error('Error al crear la tabla', err.stack));
+client.query(createTableUsuariosQuery)
+    .then(() => console.log('Tabla usuarios creada o ya existe'))
+    .catch(err => console.error('Error al crear la tabla de usuarios', err.stack));
 
-client.query(createTableLoginQuery)
+client.query(createTableContactosQuery)
     .then(() => console.log('Tabla contactos creada o ya existe'))
-    .catch(err => console.error('Error al crear la tabla', err.stack));
+    .catch(err => console.error('Error al crear la tabla de contactos', err.stack));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');  
 });
 
-app.get('/contactos', (req, res) => {
-    const query = 'SELECT * FROM contactos'; 
-    client.query(query, (err, results) => {
+// Métodos para Contactos
+app.get('/contactos/:id_usuario', (req, res) => {
+    const { id_usuario } = req.params;
+    const query = 'SELECT * FROM contactos WHERE id_usuario = $1'; 
+    client.query(query, [id_usuario], (err, results) => {
         if (err) {
             console.error('Error al obtener los contactos:', err);
             res.status(500).send('Error al obtener los contactos');
@@ -66,35 +69,15 @@ app.get('/contactos', (req, res) => {
     });
 });
 
-app.get('/contactos/telefono/:telefono', (req, res) => {
-    const { telefono } = req.params;
-    const query = 'SELECT * FROM contactos WHERE telefono = $1';
-    const values = [telefono];
-
-    client.query(query, values, (err, results) => {
-        if (err) {
-            console.error('Error al buscar el contacto:', err);
-            res.status(500).send('Error al buscar el contacto');
-            return;
-        }
-
-        if (results.rows.length === 0) {
-            return res.status(404).send('Contacto no encontrado');
-        }
-
-        res.json(results.rows[0]);
-    });
-});
-
 app.post('/contactos', (req, res) => {
-    const { nombre, telefono } = req.body;
+    const { nombre, telefono, id_usuario } = req.body;
 
-    if (!nombre || !telefono) {
-        return res.status(400).send('Faltan datos (nombre o teléfono)');
+    if (!nombre || !telefono || !id_usuario) {
+        return res.status(400).send('Faltan datos (nombre, teléfono o id_usuario)');
     }
 
-    const query = 'INSERT INTO contactos (nombre, telefono) VALUES ($1, $2) RETURNING *';
-    const values = [nombre, telefono];
+    const query = 'INSERT INTO contactos (nombre, telefono, id_usuario) VALUES ($1, $2, $3) RETURNING *';
+    const values = [nombre, telefono, id_usuario];
 
     client.query(query, values, (err, results) => {
         if (err) {
@@ -106,10 +89,10 @@ app.post('/contactos', (req, res) => {
     });
 });
 
-app.delete('/contactos/telefono/:telefono', (req, res) => {
-    const { telefono } = req.params; 
-    const query = 'DELETE FROM contactos WHERE telefono = $1 RETURNING *';
-    const values = [telefono];
+app.delete('/contactos/:id_usuario/:telefono', (req, res) => {
+    const { id_usuario, telefono } = req.params; 
+    const query = 'DELETE FROM contactos WHERE id_usuario = $1 AND telefono = $2 RETURNING *';
+    const values = [id_usuario, telefono];
 
     client.query(query, values, (err, results) => {
         if (err) {
@@ -126,36 +109,78 @@ app.delete('/contactos/telefono/:telefono', (req, res) => {
     });
 });
 
-app.get('/login', (req, res) => {
-    const query = 'SELECT * FROM login';
-    client.query(query, (err, results) => {
-        if (err) {
-            console.error('Error al obtener los registros de login:', err);
-            res.status(500).send('Error al obtener los registros de login');
-            return;
-        }
-        res.json(results.rows);
-    });
-});
+// Métodos para Usuarios
 
+// Crear un usuario
+app.post('/usuarios', (req, res) => {
+    const { nombre, correo, contraseña } = req.body;
 
-app.post('/login', (req, res) => {
-    const { nombre, correo, fechaNacimiento, contraseña } = req.body;
-
-    if (!nombre || !correo || !fechaNacimiento || !contraseña) {
-        return res.status(400).send('Faltan datos (nombre, correo, fechaNacimiento o contraseña)');
+    if (!nombre || !correo || !contraseña) {
+        return res.status(400).send('Faltan datos (nombre, correo o contraseña)');
     }
 
-    const query = 'INSERT INTO login (nombre, correo, fechaNacimiento, contraseña) VALUES ($1, $2, $3, $4) RETURNING *';
-    const values = [nombre, correo, fechaNacimiento, contraseña];
+    const query = 'INSERT INTO usuarios (nombre, correo, contraseña) VALUES ($1, $2, $3) RETURNING *';
+    const values = [nombre, correo, contraseña];
 
     client.query(query, values, (err, results) => {
         if (err) {
-            console.error('Error al agregar el registro de login:', err);
-            res.status(500).send('Error al agregar el registro de login');
+            console.error('Error al agregar el usuario:', err);
+            res.status(500).send('Error al agregar el usuario');
             return;
         }
         res.status(201).json(results.rows[0]);
+    });
+});
+
+// Verificar usuario para login
+app.post('/usuarios/login', (req, res) => {
+    const { correo, contraseña } = req.body;
+
+    if (!correo || !contraseña) {
+        return res.status(400).send('Faltan datos (correo o contraseña)');
+    }
+
+    const query = 'SELECT * FROM usuarios WHERE correo = $1 AND contraseña = $2';
+    const values = [correo, contraseña];
+
+    client.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error al verificar el usuario:', err);
+            res.status(500).send('Error al verificar el usuario');
+            return;
+        }
+
+        if (results.rows.length === 0) {
+            return res.status(401).send('Credenciales inválidas');
+        }
+
+        res.status(200).json({ mensaje: 'Login exitoso', usuario: results.rows[0] });
+    });
+});
+
+// Modificar la contraseña del usuario
+app.put('/usuarios/contraseña', (req, res) => {
+    const { correo, nuevaContraseña } = req.body;
+
+    if (!correo || !nuevaContraseña) {
+        return res.status(400).send('Faltan datos (correo o nueva contraseña)');
+    }
+
+    const query = 'UPDATE usuarios SET contraseña = $1 WHERE correo = $2 RETURNING *';
+    const values = [nuevaContraseña, correo];
+
+    client.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error al actualizar la contraseña:', err);
+            res.status(500).send('Error al actualizar la contraseña');
+            return;
+        }
+
+        if (results.rowCount === 0) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        res.status(200).json({ mensaje: 'Contraseña actualizada exitosamente', usuario: results.rows[0] });
     });
 });
 
