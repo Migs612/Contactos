@@ -111,19 +111,6 @@ ul li span {
     width: 95%;
     background-color: #f9f9f9;
 }
-#form-buscar-contacto button {
-    background: linear-gradient(to bottom right, #c3d488, #dbe4a9);
-    border: 1px solid #afc57d;
-    border-radius: 10px;
-    padding: 10px 15px;
-    font-size: 18px;
-    font-family: Montserrat M;
-}
-#form-buscar-contacto button:hover {
-    background: #a4b877;
-    cursor: pointer;
-    border: 1px solid #8ea064;
-}
 
 #form-eliminar-contacto label {
     font-size: 18px;
@@ -137,7 +124,9 @@ ul li span {
     width: 95%;
     background-color: #f9f9f9;
 }
-#form-eliminar-contacto button {
+
+#form-eliminar-contacto button,
+#form-buscar-contacto button {
     background: linear-gradient(to bottom right, #c3d488, #dbe4a9);
     border: 1px solid #afc57d;
     border-radius: 10px;
@@ -145,7 +134,9 @@ ul li span {
     font-size: 18px;
     font-family: Montserrat M;
 }
-#form-eliminar-contacto button:hover {
+
+#form-eliminar-contacto button:hover,
+#form-buscar-contacto button:hover {
     background: #a4b877;
     cursor: pointer;
     border: 1px solid #8ea064;

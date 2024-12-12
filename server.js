@@ -55,7 +55,6 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/login.html');  
 });
 
-// Métodos para Contactos
 app.get('/contactos/:id_usuario', (req, res) => {
     const { id_usuario } = req.params;
     const query = 'SELECT * FROM contactos WHERE id_usuario = $1'; 
@@ -89,6 +88,26 @@ app.post('/contactos', (req, res) => {
     });
 });
 
+app.get('/contactos/:id_usuario/buscar/:telefono', (req, res) => {
+    const { id_usuario, telefono } = req.params;
+    const query = 'SELECT * FROM contactos WHERE id_usuario = $1 AND telefono = $2';
+    const values = [id_usuario, telefono];
+
+    client.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error al buscar el contacto:', err);
+            res.status(500).send('Error al buscar el contacto');
+            return;
+        }
+
+        if (results.rows.length === 0) {
+            return res.status(404).send('Contacto no encontrado');
+        }
+
+        res.status(200).json(results.rows[0]);
+    });
+});
+
 app.delete('/contactos/:id_usuario/:telefono', (req, res) => {
     const { id_usuario, telefono } = req.params; 
     const query = 'DELETE FROM contactos WHERE id_usuario = $1 AND telefono = $2 RETURNING *';
@@ -109,9 +128,6 @@ app.delete('/contactos/:id_usuario/:telefono', (req, res) => {
     });
 });
 
-// Métodos para Usuarios
-
-// Crear un usuario
 app.post('/usuarios', (req, res) => {
     const { nombre, correo, contraseña } = req.body;
 
@@ -132,7 +148,6 @@ app.post('/usuarios', (req, res) => {
     });
 });
 
-// Verificar usuario para login
 app.post('/usuarios/login', (req, res) => {
     const { correo, contraseña } = req.body;
 
@@ -158,7 +173,6 @@ app.post('/usuarios/login', (req, res) => {
     });
 });
 
-// Modificar la contraseña del usuario
 app.put('/usuarios/contraseña', (req, res) => {
     const { correo, nuevaContraseña } = req.body;
 

@@ -1,26 +1,44 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Contactos</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Login/Registro</title>
+    <link rel="stylesheet" href="styleLogin.css">
 </head>
 <body>
-    <h1>Gestión de Contactos</h1>
-    <nav>
-        <a href="#" id="listar-contactos">Listar Contactos</a>
-        <a href="#" id="agregar-contacto">Agregar Contacto</a>
-        <a href="#" id="buscar-contacto">Buscar Contacto</a>
-        <a href="#" id="eliminar-contacto">Eliminar Contacto</a>
-    </nav>
     <div class="container">
-        <h2 id="section-title">Lista de Contactos</h2>
-        <div id="content">
-            <ul id="lista-contactos">
-            </ul>
+        <h1>Bienvenido</h1>
+
+        <div id="login-container" class="div_login">
+            <h2>Iniciar Sesión</h2>
+            <form id="login-form">
+                <p>Correo electrónico</p>
+                <input type="email" id="login-email" placeholder="Correo electrónico" required>
+                <p>Contraseña</p>
+                <input type="password" id="login-password" placeholder="Contraseña" required>
+                <button type="submit">Iniciar Sesión</button>
+                <button type="button" id="alRegistro">Registrarse</button>
+                <p id="login-message" class="message"></p>
+            </form>
+        </div>
+
+        <div id="register-container" class="div_form hidden">
+            <h2>Registrarse</h2>
+            <form id="register-form">
+                <p>Nombre</p>
+                <input type="text" id="register-name" placeholder="Nombre" required>
+                <p>Correo Electrónico</p>
+                <input type="email" id="register-email" placeholder="Correo electrónico" required>
+                <p>Contraseña</p>
+                <input type="password" id="register-password" placeholder="Contraseña" required>
+                <button type="button" id="alLogin">Volver atrás</button>
+                <button type="submit">Registrarse</button>
+                <p id="register-message" class="message"></p>
+            </form>
         </div>
     </div>
-    <script src="contacts.js"></script>
+
+    <script src="login.js"></script>
 </body>
 </html>

@@ -15,9 +15,9 @@ body {
 
 .container {
     display: flex;
-    flex-direction: column; /* Asegura una alineación vertical del contenido interno */
-    justify-content: center; /* Centra el contenido interno verticalmente */
-    align-items: center; /* Centra el contenido interno horizontalmente */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 400px;
     padding: 20px;
     border-radius: 10px;

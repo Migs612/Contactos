@@ -36,10 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 loginMessage.textContent = 'Inicio de sesión exitoso';
                 loginMessage.classList.add('success');
-                 // Redirige a index.html después del login exitoso
-                window.location.href = 'index.html';
-                // Almacena el id del usuario en el almacenamiento local (para usarlo en index.html)
-               localStorage.setItem('userId', data.usuario.id);
+                window.location.href = 'contactos.html';
+                localStorage.setItem('userId', data.usuario.id);
             } else {
                 loginMessage.textContent = data.message || 'Credenciales inválidas';
                 loginMessage.classList.add('error');
@@ -51,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Evento de envío del formulario de registro
     registerForm.addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -72,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if(response.ok){
                 registerMessage.textContent = 'Registro exitoso. Inicia sesión.';
                 registerMessage.classList.add('success');
+                document.getElementById("register-container").style.display = "none";
+                document.getElementById("login-container").style.display = "flex"
             }
             else{
                 registerMessage.textContent = data.message || 'Error al registrar usuario';
