@@ -5,78 +5,98 @@
 body {
     width: 100vw;
     height: 100vh;
-}
-
-#div_form {
-    width: 100%;
-    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    background-color: #f7f7f7;
 }
 
-#div_login {
-    width: 300px;
-    height: 350px;
-    border: 1px solid black;
+.container {
+    display: flex;
+    flex-direction: column; /* Asegura una alineación vertical del contenido interno */
+    justify-content: center; /* Centra el contenido interno verticalmente */
+    align-items: center; /* Centra el contenido interno horizontalmente */
+    width: 400px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    background-color: #ffffff;
 }
 
-#div_login input[value="Iniciar sesión"]  {
-    margin-right: 10px;
-}
-
-#div_registro {
-    width: 300px;
-    height: 400px;
-    border: 1px solid black;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
-
-h3 {
+h1 {
     width: 100%;
     text-align: center;
-    font-size: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
 }
 
-label {
-    width: 30%;
-    height: 20px;
-    margin-left: 5px;
-}
-
-input[type="text"] {
-    width: 65%;
-    padding: 8px;
-    margin-right: 5px;
-}
-
-input[type="button"] {
-    background: linear-gradient(to bottom right, #c3d488, #dbe4a9);
-    border: 1px solid #afc57d;
+.div_login, .div_form {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
     border-radius: 10px;
-    padding: 10px 15px;
-    font-size: 18px;
-    font-family: Montserrat M;
-}
-
-input[type="button"]:hover {
-    background: #a4b877;
-    cursor: pointer;
-    border: 1px solid #8ea064;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
 }
 
 .hidden {
     display: none;
+}
+
+h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+p {
+    margin: 10px 0 5px 0;
+    font-size: 14px;
+    color: #555;
+    width: 100%;
+    text-align: left;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    background: linear-gradient(to bottom right, #c3d488, #dbe4a9);
+    border: 1px solid #afc57d;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    margin-bottom: 10px;
+    transition: background 0.3s, border 0.3s;
+}
+
+button:hover {
+    background: #a4b877;
+    border: 1px solid #8ea064;
+}
+
+button:last-of-type {
+    margin-top: 5px;
+}
+
+.message {
+    font-size: 12px;
+    color: red;
+    margin-top: 10px;
+    text-align: center;
 }

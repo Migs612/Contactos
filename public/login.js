@@ -3,8 +3,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('register-form');
     const loginMessage = document.getElementById('login-message');
     const registerMessage = document.getElementById('register-message');
+    const botonRegistro = document.getElementById('alRegistro');
+    const botonLogin = document.getElementById('alLogin');
 
-    // Evento de envío del formulario de inicio de sesión
+    botonRegistro.addEventListener('click', () => {
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("register-container").style.display = "flex";
+    });
+    
+    botonLogin.addEventListener('click', () => {
+        document.getElementById("register-container").style.display = "none";
+        document.getElementById("login-container").style.display = "flex";        
+    });
+
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
 
